@@ -26,6 +26,7 @@ const NAV = [
   { label: 'Demo Accounts', href: '/category/demo-accounts/' },
   { label: 'Learn',         href: '/category/learn/' },
   { label: 'Bots',          href: '/category/bots/' },
+  { label: 'Tools',         href: '/tools/' },
 ]
 
 export default function Header() {

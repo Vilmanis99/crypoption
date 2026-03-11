@@ -14,6 +14,20 @@ import TableOfContents from '@/components/TableOfContents'
 import StickyArticleCTA from '@/components/StickyArticleCTA'
 import InlineEmailCapture from '@/components/InlineEmailCapture'
 
+function extractFaqItems(html: string): { question: string; answer: string }[] {
+  const faqItems: { question: string; answer: string }[] = []
+  const regex = /<h3\s+class="rank-math-question">([\s\S]*?)<\/h3>\s*<div\s+class="rank-math-answer">([\s\S]*?)<\/div>/g
+  let match
+  while ((match = regex.exec(html)) !== null) {
+    const question = match[1].replace(/<[^>]*>/g, '').trim()
+    const answer = match[2].replace(/<[^>]*>/g, '').trim()
+    if (question && answer) {
+      faqItems.push({ question, answer })
+    }
+  }
+  return faqItems
+}
+
 interface Props {
   params: Promise<{ slug: string }>
 }
@@ -77,6 +91,7 @@ export default async function PostPage({ params }: Props) {
 
   const html = cleanContent(post.content)
   const headings = extractHeadings(html)
+  const faqItems = extractFaqItems(html)
 
   const related = getAllPosts('en')
     .filter(p => p.slug !== post.slug && p.categories.some(c => post.categories.includes(c)))
@@ -113,6 +128,19 @@ export default async function PostPage({ params }: Props) {
       },
     },
   }
+
+  const faqSchema = faqItems.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map(item => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  } : null
 
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
@@ -154,6 +182,9 @@ export default async function PostPage({ params }: Props) {
     <div className="mx-auto max-w-6xl px-4 py-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {faqSchema && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      )}
       <div className="lg:grid lg:grid-cols-[1fr_300px] lg:gap-10">
 
         {/* ── Article ── */}
@@ -350,6 +381,7 @@ export default async function PostPage({ params }: Props) {
                   ['Demo Accounts', '/category/demo-accounts/'],
                   ['Learn', '/category/learn/'],
                   ['Bots', '/category/bots/'],
+                  ['Tools', '/tools/'],
                 ].map(([label, href]) => (
                   <li key={href}>
                     <Link
