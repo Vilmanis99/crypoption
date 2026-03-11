@@ -43,7 +43,7 @@ export default function Header() {
       <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3">
         <Link href="/" className="shrink-0">
           <Image
-            src="/images/2024/09/Dark-BG-Logo-e1726598075350.png"
+            src="/images/crypoption-logo.webp"
             alt="CrypOptionHub"
             width={200}
             height={50}

@@ -68,7 +68,7 @@ export default function Footer() {
           <div className="lg:col-span-2">
             <Link href="/">
               <Image
-                src="/images/2024/09/Dark-BG-Logo-e1726598075350.png"
+                src="/images/crypoption-logo.webp"
                 alt="CrypOptionHub"
                 width={200}
                 height={50}
