@@ -158,14 +158,32 @@ export default function HomePage() {
       {/* ════════════════════════════════════════════════════════
           START HERE BANNER
          ════════════════════════════════════════════════════════ */}
-      <div className="border-b py-4 text-center" style={{ background: '#fff' }}>
-        <span className="text-sm" style={{ color: '#64748b' }}>New to binary options? </span>
+      <div className="px-4 py-8" style={{ background: 'linear-gradient(135deg, #f0f7ff, #e8f4fe)' }}>
         <Link
           href="/binary-options-trading-guide/"
-          className="text-sm font-bold transition-colors hover:underline"
-          style={{ color: '#1b59ff' }}
+          className="mx-auto flex max-w-3xl items-center gap-5 rounded-2xl p-5 transition-all hover:shadow-lg"
+          style={{ background: '#fff', border: '1px solid #d0e3f7', boxShadow: '0 4px 16px rgba(27,89,255,0.08)' }}
         >
-          Start with our complete beginner&apos;s guide →
+          <div
+            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl text-2xl"
+            style={{ background: 'linear-gradient(135deg, #1b59ff, #4f8aff)' }}
+          >
+            <span className="text-white">📘</span>
+          </div>
+          <div className="flex-1">
+            <p className="font-black" style={{ fontSize: 16, color: '#0f172a' }}>
+              New to Binary Options?
+            </p>
+            <p className="mt-0.5 text-sm" style={{ color: '#64748b' }}>
+              Start with our complete beginner&apos;s guide — learn the basics, understand risk, and choose the right broker.
+            </p>
+          </div>
+          <span
+            className="hidden shrink-0 rounded-full px-5 py-2 text-sm font-bold text-white sm:inline-block"
+            style={{ background: '#1b59ff' }}
+          >
+            Read Guide →
+          </span>
         </Link>
       </div>
 
