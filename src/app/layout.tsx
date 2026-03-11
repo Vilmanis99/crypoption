@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LangSetter from "@/components/LangSetter";
 import NewsletterPopup from "@/components/NewsletterPopup";
+import BrokerQuizPopup from "@/components/BrokerQuizPopup";
 
 const lato = Lato({
   weight: ["400", "700", "900"],
@@ -50,6 +51,7 @@ export default function RootLayout({
         {children}
         <Footer />
         <NewsletterPopup />
+        <BrokerQuizPopup />
       </body>
     </html>
   );

@@ -7,12 +7,15 @@ import {
   getAllPosts,
   cleanContent,
   extractHeadings,
+  extractFaqItems,
   formatDate,
 } from '@/lib/content'
 import authorsData from '@/data/authors.json'
 import TableOfContents from '@/components/TableOfContents'
 import StickyArticleCTA from '@/components/StickyArticleCTA'
 import InlineEmailCapture from '@/components/InlineEmailCapture'
+import RecommendedReading from '@/components/RecommendedReading'
+import YouTubeChannelCTA from '@/components/YouTubeChannelCTA'
 
 interface Props {
   params: Promise<{ slug: string }>
@@ -77,10 +80,21 @@ export default async function PostPage({ params }: Props) {
 
   const html = cleanContent(post.content)
   const headings = extractHeadings(html)
+  const faqItems = extractFaqItems(post.content)
 
-  const related = getAllPosts('en')
-    .filter(p => p.slug !== post.slug && p.categories.some(c => post.categories.includes(c)))
-    .slice(0, 4)
+  // Score-based related articles: shared categories (3pts each) + shared tags (1pt each)
+  const allEnPosts = getAllPosts('en').filter(p => p.slug !== post.slug)
+  const scored = allEnPosts.map(p => {
+    let score = 0
+    score += p.categories.filter(c => post.categories.includes(c)).length * 3
+    score += p.tags.filter(t => post.tags.includes(t)).length
+    return { post: p, score }
+  })
+  scored.sort((a, b) => b.score - a.score)
+  const related = scored.filter(s => s.score > 0).slice(0, 6).map(s => s.post)
+
+  // Pick 2 related articles to show as mid-article recommendations
+  const midArticleRecs = related.slice(0, 2)
 
   const author = authorsData.find(
     a => a.login === post.author || a.displayName === post.author
@@ -150,10 +164,24 @@ export default async function PostPage({ params }: Props) {
     ],
   }
 
+  const faqSchema = faqItems.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqItems.map(item => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.answer,
+      },
+    })),
+  } : null
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-10">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(blogPostingSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {faqSchema && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />}
       <div className="lg:grid lg:grid-cols-[1fr_300px] lg:gap-10">
 
         {/* ── Article ── */}
@@ -225,6 +253,9 @@ export default async function PostPage({ params }: Props) {
             style={{ fontSize: 17, lineHeight: 1.8 }}
             dangerouslySetInnerHTML={{ __html: html }}
           />
+
+          {/* Mid-article recommended reading */}
+          <RecommendedReading articles={midArticleRecs.map(r => ({ slug: r.slug, title: r.title, featuredImage: r.featuredImage, excerpt: r.excerpt }))} />
 
           {/* Author bio box */}
           {author && (
@@ -336,6 +367,9 @@ export default async function PostPage({ params }: Props) {
 
             {/* Email signup widget */}
             <InlineEmailCapture variant="compact" />
+
+            {/* YouTube CTA */}
+            <YouTubeChannelCTA />
 
             {/* Categories widget */}
             <div className="overflow-hidden" style={{ borderRadius: 16, border: '1px solid #e2e8f0', background: '#fff' }}>

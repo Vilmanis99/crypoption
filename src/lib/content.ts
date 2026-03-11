@@ -64,6 +64,54 @@ export function extractHeadings(html: string): Heading[] {
   return headings
 }
 
+// Extract FAQ items from Rank Math FAQ blocks or H3-based FAQ sections
+export interface FaqItem {
+  question: string
+  answer: string
+}
+
+export function extractFaqItems(html: string): FaqItem[] {
+  const items: FaqItem[] = []
+
+  // 1. Try Rank Math FAQ block JSON
+  const rmRe = /rank-math\/faq-block\s*(\{[\s\S]*?\})\s*-->/g
+  let rmMatch
+  while ((rmMatch = rmRe.exec(html)) !== null) {
+    try {
+      const data = JSON.parse(rmMatch[1])
+      if (Array.isArray(data.questions)) {
+        for (const q of data.questions) {
+          if (q.title && q.content) {
+            items.push({
+              question: q.title.replace(/<[^>]+>/g, '').trim(),
+              answer: q.content.replace(/<[^>]+>/g, '').trim(),
+            })
+          }
+        }
+      }
+    } catch { /* skip malformed JSON */ }
+  }
+
+  if (items.length > 0) return items
+
+  // 2. Fallback: look for FAQ h2 followed by h3 question / paragraph answer pairs
+  const faqSectionRe = /<h2[^>]*>[^<]*FAQ[^<]*<\/h2>([\s\S]*?)(?=<h2|$)/i
+  const sectionMatch = faqSectionRe.exec(html)
+  if (sectionMatch) {
+    const section = sectionMatch[1]
+    const pairRe = /<h3[^>]*>([\s\S]*?)<\/h3>\s*<p[^>]*>([\s\S]*?)<\/p>/g
+    let pair
+    while ((pair = pairRe.exec(section)) !== null) {
+      items.push({
+        question: pair[1].replace(/<[^>]+>/g, '').trim(),
+        answer: pair[2].replace(/<[^>]+>/g, '').trim(),
+      })
+    }
+  }
+
+  return items
+}
+
 // ─── Posts ────────────────────────────────────────────────────────────────────
 
 export function getAllPosts(lang?: string): Post[] {
