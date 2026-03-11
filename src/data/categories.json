@@ -1,0 +1,86 @@
+[
+  {
+    "id": "142",
+    "slug": "bots",
+    "parent": "",
+    "name": "Bots",
+    "description": ""
+  },
+  {
+    "id": "7",
+    "slug": "brokers",
+    "parent": "",
+    "name": "Brokers",
+    "description": "<h1>Binary Options Brokers Reviewed</h1>\nCheck out Binary Options broker reviews written by CrypOptionHub experts. These insights will help you identify whether these brokers are legit or not, and if they are the right choice for you."
+  },
+  {
+    "id": "6",
+    "slug": "demo-accounts",
+    "parent": "",
+    "name": "Demo Accounts",
+    "description": "<h1>Binary Options Demo Accounts</h1>\nCheck out the best binary options demo accounts. These accounts allow you to test your strategies and practice without risking real funds, and are usually free to use."
+  },
+  {
+    "id": "5",
+    "slug": "learn",
+    "parent": "",
+    "name": "Learn",
+    "description": "<h1>Learn the Basics</h1>\nLearn everything about general and basic trading concepts. Remember, every successful trading career is built on strong foundations."
+  },
+  {
+    "id": "8",
+    "slug": "signals",
+    "parent": "",
+    "name": "Signals",
+    "description": "<h1>Binary Options Signals</h1>\nRead our reviews of the top binary options signals providers before subscribing to their services. Remember, relying solely on signals is never the best practice. It is recommended to only use Binary Options signals as a complement to your existing strategies."
+  },
+  {
+    "id": "11",
+    "slug": "strategies",
+    "parent": "",
+    "name": "Strategies",
+    "description": "<h1>Binary Options Strategies</h1>\nLearn about different trading and binary options strategies to boost your profitability. These trading strategies are carefully tested and explained simply by our experts. Yet, make sure to test them yourselves before implementing them and risking capital."
+  },
+  {
+    "id": "1",
+    "slug": "uncategorized",
+    "parent": "",
+    "name": "Uncategorized",
+    "description": "<h1>Uncategorized insights</h1>"
+  },
+  {
+    "id": "98",
+    "slug": "uncategorized-ru",
+    "parent": "",
+    "name": "Uncategorized",
+    "description": "<h1>Аналитические данные без категории.</h1>\nОзнакомьтесь с аналитическими материалами без категории на CrypOption Hub."
+  },
+  {
+    "id": "92",
+    "slug": "brokery",
+    "parent": "",
+    "name": "Брокеры",
+    "description": "<h1>Обзор брокеров бинарных опционов</h1>\nОзнакомьтесь с обзорами брокеров бинарных опционов, написанными экспертами CrypOptionHub. Эти данные помогут вам определить, являются ли эти брокеры законными или нет, и подходят ли они вам."
+  },
+  {
+    "id": "96",
+    "slug": "signaly",
+    "parent": "",
+    "name": "Сигналы",
+    "description": "<h1>Сигналы бинарных опционов</h1>\nПеред тем как подписаться на услуги ведущих поставщиков сигналов для бинарных опционов, ознакомьтесь с нашими обзорами."
+  },
+  {
+    "id": "104",
+    "slug": "strategii",
+    "parent": "",
+    "name": "Стратегии",
+    "description": "<h1>Стратегии бинарных опционов</h1>\nУзнайте о различных стратегиях торговли и бинарных опционах, которые помогут повысить вашу прибыльность. Эти торговые стратегии тщательно протестированы и простым языком объяснены нашими экспертами. Однако, прежде чем внедрять их и рисковать капиталом, обязательно протестируйте их сами."
+  },
+  {
+    "id": "90",
+    "slug": "uznat",
+    "parent": "",
+    "name": "Узнать",
+    "description": "<h1>Изучите основы</h1>\nИзучите все основные и базовые концепции трейдинга. Помните, что любая успешная карьера трейдера строится на прочном фундаменте."
+  }
+]
