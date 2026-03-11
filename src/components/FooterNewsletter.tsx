@@ -31,6 +31,7 @@ export default function FooterNewsletter() {
           <form onSubmit={handleSubmit} className="mx-auto flex max-w-md gap-0">
             <input
               type="email"
+              inputMode="email"
               value={email}
               onChange={e => { setEmail(e.target.value); setError('') }}
               placeholder="Enter your email"

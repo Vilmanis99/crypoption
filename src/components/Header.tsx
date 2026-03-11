@@ -139,7 +139,7 @@ export default function Header() {
           </div>
 
           <button
-            className="flex h-10 w-10 items-center justify-center rounded-lg lg:hidden"
+            className="flex h-11 w-11 items-center justify-center rounded-lg lg:hidden"
             style={{ border: '1px solid #374a5d' }}
             onClick={() => setMobileOpen(!mobileOpen)}
             aria-label="Toggle menu"
@@ -158,7 +158,7 @@ export default function Header() {
 
       {/* Mobile dropdown nav */}
       {mobileOpen && (
-        <div className="lg:hidden" style={{ background: '#0d151f', borderTop: '1px solid #1e2e40' }}>
+        <div className="lg:hidden" style={{ background: '#0d151f', borderTop: '1px solid #1e2e40', maxHeight: 'calc(100vh - 60px)', overflowY: 'auto' }}>
           <nav className="flex flex-col px-4 py-3">
             <Link href="/pocket-option/" onClick={() => setMobileOpen(false)} className="py-2.5 text-sm font-bold" style={{ color: '#7adeff', borderBottom: '1px solid #1e2e40' }}>
               Pocket Option

@@ -155,8 +155,11 @@ body {
   vertical-align: middle;
   padding: 15px 10px;
   border-bottom: 1px solid #ccc;
-  white-space: nowrap;
   background: linear-gradient(to bottom, #fff, #e9f7ff);
+}
+
+@media (min-width: 640px) {
+  .wp-content table:not(.tablepress) td { white-space: nowrap; }
 }
 
 .wp-content table:not(.tablepress) tbody tr:hover td {

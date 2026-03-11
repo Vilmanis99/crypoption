@@ -88,7 +88,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   title={s.label}
-                  className="flex h-9 w-9 items-center justify-center rounded-full text-white transition-opacity hover:opacity-80"
+                  className="flex h-11 w-11 items-center justify-center rounded-full text-white transition-opacity hover:opacity-80"
                   style={{ background: '#1e2e40' }}
                 >
                   {s.icon}

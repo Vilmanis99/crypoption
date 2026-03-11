@@ -57,9 +57,10 @@ export default function InlineEmailCapture({ variant, lang = 'en' }: { variant: 
           </div>
 
           {!submitted ? (
-            <form onSubmit={handleSubmit} className="flex w-full max-w-md gap-3">
+            <form onSubmit={handleSubmit} className="flex w-full max-w-md flex-col gap-3 sm:flex-row">
               <input
                 type="email"
+                inputMode="email"
                 value={email}
                 onChange={e => { setEmail(e.target.value); setError('') }}
                 placeholder={c.placeholder}

@@ -66,13 +66,13 @@ export default function NewsletterPopup() {
     >
       <div
         className="relative w-full max-w-md"
-        style={{ background: '#fff', borderRadius: 20, padding: 32, animation: 'slide-up-modal 0.3s ease-out' }}
+        style={{ background: '#fff', borderRadius: 20, padding: 'clamp(20px, 5vw, 32px)', animation: 'slide-up-modal 0.3s ease-out', maxHeight: '90vh', overflowY: 'auto' }}
         onClick={e => e.stopPropagation()}
       >
         {/* Close */}
         <button
           onClick={() => setVisible(false)}
-          className="absolute right-4 top-4 flex h-8 w-8 items-center justify-center rounded-full transition-colors hover:bg-slate-100"
+          className="absolute right-3 top-3 flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-slate-100"
           aria-label="Close popup"
         >
           <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="#64748b" strokeWidth={2}>
@@ -99,6 +99,7 @@ export default function NewsletterPopup() {
             <form onSubmit={handleSubmit}>
               <input
                 type="email"
+                inputMode="email"
                 value={email}
                 onChange={e => { setEmail(e.target.value); setError('') }}
                 placeholder="Enter your email address"

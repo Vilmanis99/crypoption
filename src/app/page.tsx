@@ -101,7 +101,7 @@ export default function HomePage() {
         <div className="absolute -left-32 top-1/2 h-80 w-80 -translate-y-1/2 rounded-full opacity-20 blur-[100px]" style={{ background: '#1b59ff' }} />
         <div className="absolute -right-32 top-1/4 h-64 w-64 rounded-full opacity-15 blur-[80px]" style={{ background: '#7adeff' }} />
 
-        <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-20 lg:pb-28 lg:pt-28">
+        <div className="relative mx-auto max-w-6xl px-4 pb-14 pt-14 lg:pb-28 lg:pt-28">
           <div className="mx-auto max-w-3xl text-center">
             {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-xs font-semibold" style={{ borderColor: '#1e3a5f', background: 'rgba(27,89,255,0.08)', color: '#7adeff' }}>
