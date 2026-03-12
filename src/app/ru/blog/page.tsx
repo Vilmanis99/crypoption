@@ -8,10 +8,19 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://crypoptionhub.com/ru/blog/' },
 }
 
-export default function RuBlogPage() {
-  const posts = getAllPosts('ru').sort(
+const POSTS_PER_PAGE = 12
+
+export default async function RuBlogPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const params = await searchParams
+  const currentPage = Math.max(1, parseInt(params.page || '1', 10) || 1)
+
+  const allPosts = getAllPosts('ru').sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   )
+
+  const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE)
+  const page = Math.min(currentPage, totalPages || 1)
+  const posts = allPosts.slice((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE)
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -34,7 +43,7 @@ export default function RuBlogPage() {
           Последние статьи о бинарных опционах, обзоры брокеров и торговые стратегии.
         </p>
         <p className="mt-3 text-xs font-bold" style={{ color: '#7adeff' }}>
-          {posts.length} статей опубликовано
+          {allPosts.length} статей опубликовано
         </p>
       </div>
 
@@ -72,6 +81,43 @@ export default function RuBlogPage() {
           </article>
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <nav className="mt-12 flex items-center justify-center gap-2">
+          {page > 1 && (
+            <Link
+              href={page === 2 ? '/ru/blog/' : `/ru/blog/?page=${page - 1}`}
+              className="rounded-xl px-5 py-2.5 text-sm font-bold transition-colors hover:bg-slate-100"
+              style={{ border: '1px solid #e2e8f0', color: '#374a5d' }}
+            >
+              Назад
+            </Link>
+          )}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+            <Link
+              key={p}
+              href={p === 1 ? '/ru/blog/' : `/ru/blog/?page=${p}`}
+              className="rounded-xl px-4 py-2.5 text-sm font-bold transition-colors"
+              style={p === page
+                ? { background: '#1b59ff', color: '#fff' }
+                : { border: '1px solid #e2e8f0', color: '#374a5d' }
+              }
+            >
+              {p}
+            </Link>
+          ))}
+          {page < totalPages && (
+            <Link
+              href={`/ru/blog/?page=${page + 1}`}
+              className="rounded-xl px-5 py-2.5 text-sm font-bold transition-colors hover:bg-slate-100"
+              style={{ border: '1px solid #e2e8f0', color: '#374a5d' }}
+            >
+              Далее
+            </Link>
+          )}
+        </nav>
+      )}
     </div>
   )
 }

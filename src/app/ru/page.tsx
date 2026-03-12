@@ -17,8 +17,8 @@ const BROKERS = [
 ]
 
 const STATS = [
-  { value: '120+', label: 'Экспертных статей' },
-  { value: '37',   label: 'Стратегий' },
+  { value: '150+', label: 'Экспертных статей' },
+  { value: '40+',  label: 'Стратегий' },
   { value: '5',    label: 'Брокеров' },
   { value: '2+',   label: 'Лет исследований' },
 ]

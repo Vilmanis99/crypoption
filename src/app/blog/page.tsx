@@ -9,12 +9,21 @@ export const metadata: Metadata = {
   alternates: { canonical: 'https://crypoptionhub.com/blog/' },
 }
 
-export default function BlogPage() {
-  const posts = getAllPosts('en').sort(
+const POSTS_PER_PAGE = 12
+
+export default async function BlogPage({ searchParams }: { searchParams: Promise<{ page?: string }> }) {
+  const params = await searchParams
+  const currentPage = Math.max(1, parseInt(params.page || '1', 10) || 1)
+
+  const allPosts = getAllPosts('en').sort(
     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
   )
 
-  const categories = Array.from(new Set(posts.flatMap(p => p.categories))).sort()
+  const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE)
+  const page = Math.min(currentPage, totalPages || 1)
+  const posts = allPosts.slice((page - 1) * POSTS_PER_PAGE, page * POSTS_PER_PAGE)
+
+  const categories = Array.from(new Set(allPosts.flatMap(p => p.categories))).sort()
 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
@@ -37,7 +46,7 @@ export default function BlogPage() {
           Latest articles on binary options, broker reviews, and trading strategies.
         </p>
         <p className="mt-3 text-xs font-bold" style={{ color: '#7adeff' }}>
-          {posts.length} articles published
+          {allPosts.length} articles published
         </p>
       </div>
 
@@ -60,6 +69,43 @@ export default function BlogPage() {
           <PostCard key={post.id} post={post} />
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <nav className="mt-12 flex items-center justify-center gap-2">
+          {page > 1 && (
+            <Link
+              href={page === 2 ? '/blog/' : `/blog/?page=${page - 1}`}
+              className="rounded-xl px-5 py-2.5 text-sm font-bold transition-colors hover:bg-slate-100"
+              style={{ border: '1px solid #e2e8f0', color: '#374a5d' }}
+            >
+              Previous
+            </Link>
+          )}
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map(p => (
+            <Link
+              key={p}
+              href={p === 1 ? '/blog/' : `/blog/?page=${p}`}
+              className="rounded-xl px-4 py-2.5 text-sm font-bold transition-colors"
+              style={p === page
+                ? { background: '#1b59ff', color: '#fff' }
+                : { border: '1px solid #e2e8f0', color: '#374a5d' }
+              }
+            >
+              {p}
+            </Link>
+          ))}
+          {page < totalPages && (
+            <Link
+              href={`/blog/?page=${page + 1}`}
+              className="rounded-xl px-5 py-2.5 text-sm font-bold transition-colors hover:bg-slate-100"
+              style={{ border: '1px solid #e2e8f0', color: '#374a5d' }}
+            >
+              Next
+            </Link>
+          )}
+        </nav>
+      )}
     </div>
   )
 }

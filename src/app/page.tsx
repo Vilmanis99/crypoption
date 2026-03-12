@@ -11,10 +11,10 @@ const BROKERS = [
 ]
 
 const STATS = [
-  { value: '76+', label: 'Expert Articles' },
-  { value: '37',  label: 'Tested Strategies' },
-  { value: '5',   label: 'Brokers Reviewed' },
-  { value: '2+',  label: 'Years of Research' },
+  { value: '150+', label: 'Expert Articles' },
+  { value: '40+',  label: 'Tested Strategies' },
+  { value: '5',    label: 'Brokers Reviewed' },
+  { value: '2+',   label: 'Years of Research' },
 ]
 
 const FEATURES = [

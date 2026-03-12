@@ -4,11 +4,12 @@ import FooterNewsletter from './FooterNewsletter'
 
 const CONTENT = [
   ['Brokers', '/brokers/'],
+  ['Compare Brokers', '/compare/'],
+  ['Brokers by Country', '/countries/'],
   ['Strategies', '/category/strategies/'],
   ['Signals', '/category/signals/'],
   ['Demo Accounts', '/category/demo-accounts/'],
   ['Learn', '/category/learn/'],
-  ['Bots', '/category/bots/'],
 ]
 
 const SITE = [
