@@ -2,10 +2,12 @@ import type { Heading } from '@/lib/content'
 
 interface Props {
   headings: Heading[]
+  lang?: string
 }
 
-export default function TableOfContents({ headings }: Props) {
+export default function TableOfContents({ headings, lang }: Props) {
   if (headings.length < 3) return null
+  const isRu = lang === 'ru'
 
   return (
     <nav
@@ -18,7 +20,7 @@ export default function TableOfContents({ headings }: Props) {
         style={{ background: 'linear-gradient(135deg, #101923, #374a5d)', borderRadius: '14px 14px 0 0' }}
       >
         <span className="text-base">📋</span>
-        <span className="text-sm font-bold text-white">Table of Contents</span>
+        <span className="text-sm font-bold text-white">{isRu ? 'Содержание' : 'Table of Contents'}</span>
       </div>
       <ol className="px-5 py-4 space-y-1">
         {headings.map((h, i) => (

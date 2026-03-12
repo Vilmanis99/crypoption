@@ -287,7 +287,7 @@ export default async function RuPostPage({ params }: Props) {
           </div>
 
           {/* Table of Contents */}
-          <TableOfContents headings={headings} />
+          <TableOfContents headings={headings} lang="ru" />
 
           {/* Body */}
           <div
@@ -349,7 +349,7 @@ export default async function RuPostPage({ params }: Props) {
           )}
 
           {/* Mid-article recommended reading */}
-          <RecommendedReading articles={midArticleRecs.map(r => ({ slug: `ru/${r.slug}`, title: r.title, featuredImage: r.featuredImage, excerpt: r.excerpt }))} />
+          <RecommendedReading articles={midArticleRecs.map(r => ({ slug: r.slug, title: r.title, featuredImage: r.featuredImage, excerpt: r.excerpt }))} lang="ru" />
 
           {/* Author bio box */}
           {author && (
@@ -469,7 +469,7 @@ export default async function RuPostPage({ params }: Props) {
             <InlineEmailCapture variant="compact" lang="ru" />
 
             {/* YouTube CTA */}
-            <YouTubeChannelCTA />
+            <YouTubeChannelCTA lang="ru" />
 
             {/* Explore widget */}
             <div className="overflow-hidden" style={{ borderRadius: 16, border: '1px solid #e2e8f0', background: '#fff' }}>

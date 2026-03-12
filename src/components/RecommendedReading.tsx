@@ -7,8 +7,9 @@ interface Article {
   excerpt?: string
 }
 
-export default function RecommendedReading({ articles }: { articles: Article[] }) {
+export default function RecommendedReading({ articles, lang }: { articles: Article[]; lang?: string }) {
   if (articles.length === 0) return null
+  const isRu = lang === 'ru'
 
   return (
     <div
@@ -16,13 +17,13 @@ export default function RecommendedReading({ articles }: { articles: Article[] }
       style={{ borderRadius: 16, border: '1px solid #e2e8f0', background: '#f8fafc' }}
     >
       <div className="px-5 py-3" style={{ background: 'linear-gradient(135deg, #101923, #374a5d)' }}>
-        <p className="text-sm font-bold text-white">Recommended Reading</p>
+        <p className="text-sm font-bold text-white">{isRu ? 'Рекомендуемое чтение' : 'Recommended Reading'}</p>
       </div>
       <div className="flex flex-col gap-3 p-4">
         {articles.map(a => (
           <Link
             key={a.slug}
-            href={`/${a.slug}/`}
+            href={isRu ? `/ru/${a.slug}/` : `/${a.slug}/`}
             className="flex items-center gap-3 rounded-xl p-3 transition-colors hover:bg-white"
             style={{ border: '1px solid #e2e8f0' }}
           >

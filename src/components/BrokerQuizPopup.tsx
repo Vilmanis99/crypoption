@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { usePathname } from 'next/navigation'
 
-const QUESTIONS = [
+const QUESTIONS_EN = [
   {
     q: 'What is your trading experience?',
     options: [
@@ -29,7 +30,34 @@ const QUESTIONS = [
   },
 ]
 
-const BROKERS: Record<string, { name: string; desc: string; href: string; review: string }> = {
+const QUESTIONS_RU = [
+  {
+    q: 'Какой у вас опыт в трейдинге?',
+    options: [
+      { label: 'Полный новичок', scores: { pocket: 3, quotex: 2, iq: 2 } },
+      { label: 'Небольшой опыт', scores: { pocket: 2, quotex: 3, iq: 2 } },
+      { label: 'Опытный трейдер', scores: { pocket: 2, quotex: 2, iq: 3 } },
+    ],
+  },
+  {
+    q: 'Сколько вы хотите вложить?',
+    options: [
+      { label: '$5 – $20', scores: { pocket: 3, quotex: 2, iq: 2 } },
+      { label: '$20 – $100', scores: { pocket: 2, quotex: 3, iq: 3 } },
+      { label: '$100+', scores: { pocket: 2, quotex: 2, iq: 3 } },
+    ],
+  },
+  {
+    q: 'Что для вас важнее всего?',
+    options: [
+      { label: 'Высокие выплаты', scores: { pocket: 2, quotex: 3, iq: 1 } },
+      { label: 'Лучший демо-счёт', scores: { pocket: 3, quotex: 2, iq: 2 } },
+      { label: 'Копирование сделок', scores: { pocket: 3, quotex: 1, iq: 2 } },
+    ],
+  },
+]
+
+const BROKERS_EN: Record<string, { name: string; desc: string; href: string; review: string }> = {
   pocket: {
     name: 'Pocket Option',
     desc: '$5 min deposit, 92% payouts, free $50K demo, copy trading',
@@ -50,6 +78,27 @@ const BROKERS: Record<string, { name: string; desc: string; href: string; review
   },
 }
 
+const BROKERS_RU: Record<string, { name: string; desc: string; href: string; review: string }> = {
+  pocket: {
+    name: 'Pocket Option',
+    desc: 'Депозит от $5, выплаты 92%, демо $50 000, копитрейдинг',
+    href: '/pocket/go-rus',
+    review: '/ru/pocket-option-ru/',
+  },
+  quotex: {
+    name: 'Quotex',
+    desc: 'Депозит от $10, выплаты до 95%, современная платформа',
+    href: '/quotex/go-en',
+    review: '/ru/quotex-ru/',
+  },
+  iq: {
+    name: 'IQ Option',
+    desc: 'Депозит от $10, выплаты 90%, продвинутые инструменты анализа',
+    href: '/iq-option/go-en',
+    review: '/ru/iq-option-ru/',
+  },
+}
+
 const STORAGE_KEY = 'quiz_seen'
 
 function hasSeenQuiz() {
@@ -66,6 +115,11 @@ export default function BrokerQuizPopup() {
   const [step, setStep] = useState(0)
   const [scores, setScores] = useState({ pocket: 0, quotex: 0, iq: 0 })
   const [result, setResult] = useState<string | null>(null)
+  const pathname = usePathname()
+  const isRu = pathname.startsWith('/ru')
+
+  const QUESTIONS = isRu ? QUESTIONS_RU : QUESTIONS_EN
+  const BROKERS = isRu ? BROKERS_RU : BROKERS_EN
 
   const show = useCallback(() => {
     setVisible(true)
@@ -114,7 +168,6 @@ export default function BrokerQuizPopup() {
     if (step < QUESTIONS.length - 1) {
       setStep(step + 1)
     } else {
-      // Calculate winner
       const winner = Object.entries(newScores).reduce((a, b) => (b[1] > a[1] ? b : a))[0]
       setResult(winner)
     }
@@ -160,7 +213,7 @@ export default function BrokerQuizPopup() {
             </div>
 
             <div className="mb-2 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider" style={{ background: '#eef4fe', color: '#1d4ed8' }}>
-              Question {step + 1} of {QUESTIONS.length}
+              {isRu ? `Вопрос ${step + 1} из ${QUESTIONS.length}` : `Question ${step + 1} of ${QUESTIONS.length}`}
             </div>
 
             <h3 className="mb-6 font-black leading-tight" style={{ fontSize: 22, color: '#0f172a' }}>
@@ -181,7 +234,7 @@ export default function BrokerQuizPopup() {
             </div>
 
             <p className="mt-4 text-center text-xs" style={{ color: '#94a3b8' }}>
-              Takes 10 seconds. No sign-up required.
+              {isRu ? 'Занимает 10 секунд. Регистрация не нужна.' : 'Takes 10 seconds. No sign-up required.'}
             </p>
           </>
         ) : broker ? (
@@ -196,7 +249,7 @@ export default function BrokerQuizPopup() {
             </div>
 
             <p className="mb-1 text-xs font-bold uppercase tracking-wider" style={{ color: '#1d4ed8' }}>
-              Your best match
+              {isRu ? 'Лучший выбор для вас' : 'Your best match'}
             </p>
             <h3 className="mb-2 font-black" style={{ fontSize: 24, color: '#0f172a' }}>
               {broker.name}
@@ -212,18 +265,18 @@ export default function BrokerQuizPopup() {
               className="mb-3 block w-full rounded-xl py-3.5 text-center font-bold text-white transition-all hover:opacity-90"
               style={{ background: '#1b59ff', boxShadow: '0 0 24px rgba(27,89,255,0.3)', fontSize: 15 }}
             >
-              Try {broker.name} Free
+              {isRu ? `Попробовать ${broker.name} бесплатно` : `Try ${broker.name} Free`}
             </a>
             <a
               href={broker.review}
               className="block w-full rounded-xl py-3 text-center text-sm font-bold transition-colors hover:bg-slate-50"
               style={{ color: '#374a5d', border: '1px solid #e2e8f0' }}
             >
-              Read Full Review
+              {isRu ? 'Читать полный обзор' : 'Read Full Review'}
             </a>
 
             <p className="mt-4 text-xs" style={{ color: '#94a3b8' }}>
-              Your capital is at risk. Trade responsibly.
+              {isRu ? 'Ваш капитал под риском. Торгуйте ответственно.' : 'Your capital is at risk. Trade responsibly.'}
             </p>
           </div>
         ) : null}

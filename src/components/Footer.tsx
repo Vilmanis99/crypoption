@@ -1,8 +1,11 @@
+'use client'
+
 import Link from 'next/link'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
 import FooterNewsletter from './FooterNewsletter'
 
-const CONTENT = [
+const CONTENT_EN = [
   ['Brokers', '/brokers/'],
   ['Compare Brokers', '/compare/'],
   ['Brokers by Country', '/countries/'],
@@ -12,12 +15,30 @@ const CONTENT = [
   ['Learn', '/category/learn/'],
 ]
 
-const SITE = [
+const CONTENT_RU = [
+  ['Брокеры', '/ru/brokery/'],
+  ['Сравнение брокеров', '/ru/compare/'],
+  ['Брокеры по странам', '/ru/countries/'],
+  ['Стратегии', '/ru/blog/'],
+  ['Сигналы', '/ru/blog/'],
+  ['Демо-счета', '/ru/blog/'],
+  ['Обучение', '/ru/blog/'],
+]
+
+const SITE_EN = [
   ['About', '/about/'],
   ['Authors', '/authors/'],
   ['Contact', '/contact/'],
   ['Privacy Policy', '/privacy-policy/'],
   ['Disclaimers', '/disclaimers/'],
+]
+
+const SITE_RU = [
+  ['О нас', '/about/'],
+  ['Авторы', '/authors/'],
+  ['Контакт', '/contact/'],
+  ['Политика конфиденциальности', '/privacy-policy/'],
+  ['Дисклеймер', '/disclaimers/'],
 ]
 
 const SOCIAL = [
@@ -60,6 +81,12 @@ const SOCIAL = [
 ]
 
 export default function Footer() {
+  const pathname = usePathname()
+  const isRu = pathname.startsWith('/ru')
+
+  const CONTENT = isRu ? CONTENT_RU : CONTENT_EN
+  const SITE = isRu ? SITE_RU : SITE_EN
+
   return (
     <footer style={{ background: '#101923', color: '#94a3b8' }}>
       <div className="mx-auto max-w-6xl px-4 py-12">
@@ -67,7 +94,7 @@ export default function Footer() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
 
           <div className="lg:col-span-2">
-            <Link href="/">
+            <Link href={isRu ? '/ru/' : '/'}>
               <Image
                 src="/images/crypoption-logo.webp"
                 alt="CrypOptionHub"
@@ -77,8 +104,10 @@ export default function Footer() {
               />
             </Link>
             <p className="text-sm leading-relaxed max-w-sm" style={{ color: '#94a3b8' }}>
-              Expert reviews of binary options brokers, trading strategies,
-              signals, and educational content for traders worldwide.
+              {isRu
+                ? 'Экспертные обзоры брокеров бинарных опционов, торговые стратегии, сигналы и обучение для трейдеров.'
+                : 'Expert reviews of binary options brokers, trading strategies, signals, and educational content for traders worldwide.'
+              }
             </p>
             {/* Social links */}
             <div className="mt-5 flex gap-3">
@@ -99,7 +128,7 @@ export default function Footer() {
 
             {/* Payment method badges */}
             <div className="mt-5 flex items-center gap-3">
-              <span className="text-xs" style={{ color: '#4a5568' }}>Accepted:</span>
+              <span className="text-xs" style={{ color: '#4a5568' }}>{isRu ? 'Оплата:' : 'Accepted:'}</span>
               {['Visa', 'MasterCard', 'Bitcoin', 'USDT'].map(method => (
                 <span
                   key={method}
@@ -113,7 +142,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="mb-3 text-sm font-bold" style={{ color: '#e2e8f0' }}>Content</p>
+            <p className="mb-3 text-sm font-bold" style={{ color: '#e2e8f0' }}>{isRu ? 'Контент' : 'Content'}</p>
             <ul className="space-y-2">
               {CONTENT.map(([label, href]) => (
                 <li key={href}>
@@ -126,7 +155,7 @@ export default function Footer() {
           </div>
 
           <div>
-            <p className="mb-3 text-sm font-bold" style={{ color: '#e2e8f0' }}>Site</p>
+            <p className="mb-3 text-sm font-bold" style={{ color: '#e2e8f0' }}>{isRu ? 'Сайт' : 'Site'}</p>
             <ul className="space-y-2">
               {SITE.map(([label, href]) => (
                 <li key={href}>
@@ -144,11 +173,14 @@ export default function Footer() {
           className="mt-10 rounded-xl px-5 py-4 text-xs leading-relaxed"
           style={{ background: '#0d151f', border: '1px solid #1e2e40', color: '#6b7a8d' }}
         >
-          <p className="mb-1 text-xs font-bold uppercase tracking-wider" style={{ color: '#94a3b8' }}>Risk Disclaimer</p>
+          <p className="mb-1 text-xs font-bold uppercase tracking-wider" style={{ color: '#94a3b8' }}>
+            {isRu ? 'Предупреждение о рисках' : 'Risk Disclaimer'}
+          </p>
           <p>
-            Trading binary options and other financial instruments involves significant risk of loss and is not suitable for all investors.
-            You should not invest money that you cannot afford to lose. The content on this website is for informational and educational purposes only
-            and does not constitute financial advice. Past performance is not indicative of future results.
+            {isRu
+              ? 'Торговля бинарными опционами и другими финансовыми инструментами сопряжена со значительным риском потери средств и подходит не всем инвесторам. Не вкладывайте деньги, которые вы не можете позволить себе потерять. Материалы на этом сайте носят исключительно информационный и образовательный характер и не являются финансовой консультацией. Прошлые результаты не гарантируют будущих.'
+              : 'Trading binary options and other financial instruments involves significant risk of loss and is not suitable for all investors. You should not invest money that you cannot afford to lose. The content on this website is for informational and educational purposes only and does not constitute financial advice. Past performance is not indicative of future results.'
+            }
           </p>
         </div>
 
@@ -156,8 +188,8 @@ export default function Footer() {
           className="mt-6 flex flex-col items-center justify-between gap-3 pt-6 text-xs sm:flex-row"
           style={{ borderTop: '1px solid #1e2e40', color: '#4a5568' }}
         >
-          <p>&copy; {new Date().getFullYear()} CrypOptionHub. All rights reserved.</p>
-          <p>Not financial advice. Trade responsibly.</p>
+          <p>&copy; {new Date().getFullYear()} CrypOptionHub. {isRu ? 'Все права защищены.' : 'All rights reserved.'}</p>
+          <p>{isRu ? 'Не является финансовой консультацией. Торгуйте ответственно.' : 'Not financial advice. Trade responsibly.'}</p>
         </div>
       </div>
     </footer>

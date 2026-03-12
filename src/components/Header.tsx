@@ -28,6 +28,15 @@ const NAV = [
   { label: 'Learn',         href: '/category/learn/' },
 ]
 
+const NAV_RU = [
+  { label: 'Брокеры',    href: '/ru/brokery/' },
+  { label: 'Сравнение',  href: '/ru/compare/' },
+  { label: 'Стратегии',  href: '/ru/blog/' },
+  { label: 'Сигналы',    href: '/ru/blog/' },
+  { label: 'Демо-счета', href: '/ru/blog/' },
+  { label: 'Обучение',   href: '/ru/blog/' },
+]
+
 export default function Header() {
   const [poOpen, setPoOpen] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -98,7 +107,7 @@ export default function Header() {
             )}
           </div>
 
-          {NAV.map((link) => (
+          {(isRu ? NAV_RU : NAV).map((link) => (
             <Link
               key={link.href}
               href={link.href}
@@ -168,7 +177,7 @@ export default function Header() {
                 {link.label}
               </Link>
             ))}
-            {NAV.map((link) => (
+            {(isRu ? NAV_RU : NAV).map((link) => (
               <Link key={link.href} href={link.href} onClick={() => setMobileOpen(false)} className="py-2.5 text-sm font-bold" style={{ color: '#cbd5e1', borderBottom: '1px solid #1e2e40' }}>
                 {link.label}
               </Link>
