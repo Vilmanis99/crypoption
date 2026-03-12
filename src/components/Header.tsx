@@ -21,11 +21,11 @@ const POCKET_OPTION_LINKS = [
 
 const NAV = [
   { label: 'Brokers',       href: '/brokers/' },
+  { label: 'Compare',       href: '/compare/' },
   { label: 'Strategies',    href: '/strategies/' },
   { label: 'Signals',       href: '/category/signals/' },
   { label: 'Demo Accounts', href: '/category/demo-accounts/' },
   { label: 'Learn',         href: '/category/learn/' },
-  { label: 'Bots',          href: '/category/bots/' },
 ]
 
 export default function Header() {

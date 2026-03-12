@@ -63,11 +63,35 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 const BROKER_LOGOS = [
-  { name: 'Pocket Option', img: '/images/2024/10/Pocket-Option-Logo-No-BG.png', href: '/pocket/go-en', review: '/pocket-option/' },
-  { name: 'Quotex',        img: '/images/2024/10/Quotex-Logo-No-BG.png.png',    href: '/quotex/go-en',  review: '/quotex/' },
-  { name: 'IQ Option',     img: '/images/2024/10/IQ-Option-Logo-Square.png',    href: '/iq-option/go-en', review: '/iq-option/' },
-  { name: 'Binomo',        img: '/images/2024/10/Binomo-Logo-Square.png',       href: '/binomo/go-en',  review: '/binomo/' },
+  { name: 'Pocket Option', img: '/images/2024/10/Pocket-Option-Logo-No-BG.png', href: '/pocket/go-en', review: '/pocket-option/', slugKey: 'pocket-option' },
+  { name: 'Quotex',        img: '/images/2024/10/Quotex-Logo-No-BG.png.png',    href: '/quotex/go-en',  review: '/quotex/', slugKey: 'quotex' },
+  { name: 'IQ Option',     img: '/images/2024/10/IQ-Option-Logo-Square.png',    href: '/iq-option/go-en', review: '/iq-option/', slugKey: 'iq-option' },
+  { name: 'Binomo',        img: '/images/2024/10/Binomo-Logo-Square.png',       href: '/binomo/go-en',  review: '/binomo/', slugKey: 'binomo' },
 ]
+
+// Determine article intent for context-aware CTAs
+function getArticleIntent(slug: string, categories: string[], title: string) {
+  const s = slug.toLowerCase()
+  const t = title.toLowerCase()
+  if (s.includes('promo') || s.includes('bonus') || t.includes('promo')) return 'promo'
+  if (s.includes('-vs-') || t.includes(' vs ')) return 'comparison'
+  if (categories.includes('Strategies') || s.includes('strategy') || s.includes('strateg')) return 'strategy'
+  if (s.includes('india') || s.includes('brazil') || s.includes('south-africa') || s.includes('country')) return 'country'
+  if (categories.includes('Demo Accounts') || s.includes('demo')) return 'demo'
+  if (categories.includes('Brokers') || s.includes('review')) return 'broker'
+  if (s.includes('app') || s.includes('mobile')) return 'roundup'
+  return 'general'
+}
+
+// Find which broker this article is about (if any)
+function getRelevantBroker(slug: string, title: string) {
+  const text = (slug + ' ' + title).toLowerCase()
+  if (text.includes('pocket option') || text.includes('pocket-option')) return 'pocket-option'
+  if (text.includes('quotex')) return 'quotex'
+  if (text.includes('iq option') || text.includes('iq-option')) return 'iq-option'
+  if (text.includes('binomo')) return 'binomo'
+  return null
+}
 
 function normalizeLogin(login: string): string {
   return login.toLowerCase().replace(/[@.]/g, '')
@@ -81,6 +105,14 @@ export default async function PostPage({ params }: Props) {
   const html = cleanContent(post.content)
   const headings = extractHeadings(html)
   const faqItems = extractFaqItems(post.content)
+
+  const intent = getArticleIntent(slug, post.categories, post.title)
+  const relevantBroker = getRelevantBroker(slug, post.title)
+
+  // Sort broker logos so the relevant one appears first
+  const sortedBrokers = relevantBroker
+    ? [...BROKER_LOGOS.filter(b => b.slugKey === relevantBroker), ...BROKER_LOGOS.filter(b => b.slugKey !== relevantBroker)]
+    : BROKER_LOGOS
 
   // Score-based related articles: shared categories (3pts each) + shared tags (1pt each)
   const allEnPosts = getAllPosts('en').filter(p => p.slug !== post.slug)
@@ -201,6 +233,19 @@ export default async function PostPage({ params }: Props) {
             <span style={{ color: '#64748b' }} className="line-clamp-1">{post.title}</span>
           </nav>
 
+          {/* New here? bar */}
+          <Link
+            href="/binary-options-trading-guide/"
+            className="mb-6 flex items-center gap-3 rounded-xl p-3 transition-all hover:shadow-md"
+            style={{ background: '#f0f7ff', border: '1px solid #d0e3f7' }}
+          >
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-sm" style={{ background: '#1b59ff', color: '#fff' }}>?</span>
+            <span className="flex-1 text-sm" style={{ color: '#374a5d' }}>
+              <strong>New to binary options?</strong> Start with our beginner&apos;s guide
+            </span>
+            <span className="hidden text-xs font-bold sm:inline" style={{ color: '#1b59ff' }}>Read Guide →</span>
+          </Link>
+
           {post.featuredImage && (
             <img
               src={post.featuredImage}
@@ -253,6 +298,58 @@ export default async function PostPage({ params }: Props) {
             style={{ fontSize: 17, lineHeight: 1.8 }}
             dangerouslySetInnerHTML={{ __html: html }}
           />
+
+          {/* Intent-based CTA */}
+          {intent === 'promo' && (
+            <div className="my-8 rounded-2xl p-6 text-center" style={{ background: 'linear-gradient(135deg, #101923, #1a2b3d)', border: '1px solid #1e3a5f' }}>
+              <p className="mb-2 text-lg font-black text-white">Ready to Use This Code?</p>
+              <p className="mb-4 text-sm" style={{ color: '#94a3b8' }}>Open your account and apply the promo code during deposit</p>
+              <a href="/pocket/go-en" target="_blank" rel="nofollow noopener noreferrer sponsored" className="inline-block rounded-xl px-8 py-3 font-bold text-white" style={{ background: '#1b59ff', boxShadow: '0 0 24px rgba(27,89,255,0.3)' }}>
+                Open Account & Use Code
+              </a>
+            </div>
+          )}
+          {intent === 'strategy' && (
+            <div className="my-8 rounded-2xl p-6 text-center" style={{ background: 'linear-gradient(135deg, #101923, #1a2b3d)', border: '1px solid #1e3a5f' }}>
+              <p className="mb-2 text-lg font-black text-white">Practice This Strategy Risk-Free</p>
+              <p className="mb-4 text-sm" style={{ color: '#94a3b8' }}>Try it on a $50,000 demo account before risking real money</p>
+              <div className="flex flex-wrap items-center justify-center gap-3">
+                <a href="/pocket/go-en" target="_blank" rel="nofollow noopener noreferrer sponsored" className="inline-block rounded-xl px-7 py-3 font-bold text-white" style={{ background: '#1b59ff' }}>
+                  Open Free Demo
+                </a>
+                <Link href="/pocket-option-demo/" className="inline-block rounded-xl border px-7 py-3 font-bold" style={{ borderColor: '#2a3f55', color: '#7adeff' }}>
+                  Learn About Demo
+                </Link>
+              </div>
+            </div>
+          )}
+          {intent === 'comparison' && (
+            <div className="my-8 rounded-2xl p-6 text-center" style={{ background: 'linear-gradient(135deg, #101923, #1a2b3d)', border: '1px solid #1e3a5f' }}>
+              <p className="mb-2 text-lg font-black text-white">See All Broker Comparisons</p>
+              <p className="mb-4 text-sm" style={{ color: '#94a3b8' }}>Compare features, payouts, and platforms side by side</p>
+              <Link href="/compare/" className="inline-block rounded-xl px-8 py-3 font-bold text-white" style={{ background: '#1b59ff' }}>
+                View All Comparisons →
+              </Link>
+            </div>
+          )}
+          {intent === 'country' && (
+            <div className="my-8 rounded-2xl p-6 text-center" style={{ background: 'linear-gradient(135deg, #101923, #1a2b3d)', border: '1px solid #1e3a5f' }}>
+              <p className="mb-2 text-lg font-black text-white">Find the Best Broker for Your Country</p>
+              <p className="mb-4 text-sm" style={{ color: '#94a3b8' }}>We cover deposit methods, regulations, and platform access by region</p>
+              <Link href="/countries/" className="inline-block rounded-xl px-8 py-3 font-bold text-white" style={{ background: '#1b59ff' }}>
+                Browse All Countries →
+              </Link>
+            </div>
+          )}
+          {(intent === 'demo' || intent === 'broker' || intent === 'general' || intent === 'roundup') && (
+            <div className="my-8 rounded-2xl p-6 text-center" style={{ background: 'linear-gradient(135deg, #101923, #1a2b3d)', border: '1px solid #1e3a5f' }}>
+              <p className="mb-2 text-lg font-black text-white">Compare Top Brokers</p>
+              <p className="mb-4 text-sm" style={{ color: '#94a3b8' }}>See which broker fits your trading style — real-money tested reviews</p>
+              <Link href="/brokers/" className="inline-block rounded-xl px-8 py-3 font-bold text-white" style={{ background: '#1b59ff' }}>
+                Compare Brokers →
+              </Link>
+            </div>
+          )}
 
           {/* Mid-article recommended reading */}
           <RecommendedReading articles={midArticleRecs.map(r => ({ slug: r.slug, title: r.title, featuredImage: r.featuredImage, excerpt: r.excerpt }))} />
@@ -330,17 +427,23 @@ export default async function PostPage({ params }: Props) {
         <aside className="mt-10 space-y-6 lg:mt-0">
           <div className="lg:sticky lg:top-24 space-y-6">
 
-            {/* Top Brokers widget */}
+            {/* Top Brokers widget — context-aware: highlights relevant broker */}
             <div className="overflow-hidden" style={{ borderRadius: 16, border: '1px solid #e2e8f0', background: '#fff' }}>
               <div className="px-5 py-4" style={{ background: 'linear-gradient(135deg, #101923, #374a5d)' }}>
-                <h3 className="font-bold text-white" style={{ fontSize: 15 }}>Top Brokers</h3>
+                <h3 className="font-bold text-white" style={{ fontSize: 15 }}>
+                  {relevantBroker ? 'Featured Broker' : 'Top Brokers'}
+                </h3>
               </div>
               <ul className="divide-y divide-slate-100">
-                {BROKER_LOGOS.map(b => (
-                  <li key={b.name} className="flex items-center justify-between gap-3 px-4 py-3">
+                {sortedBrokers.map(b => (
+                  <li
+                    key={b.name}
+                    className="flex items-center justify-between gap-3 px-4 py-3"
+                    style={b.slugKey === relevantBroker ? { background: '#f0f7ff', borderLeft: '3px solid #1b59ff' } : {}}
+                  >
                     <Link href={b.review} className="flex items-center gap-3">
                       <img src={b.img} alt={b.name} loading="lazy" className="h-8 w-16 object-contain" />
-                      <span className="text-sm font-semibold" style={{ color: '#374a5d' }}>{b.name}</span>
+                      <span className="text-sm font-semibold" style={{ color: b.slugKey === relevantBroker ? '#1b59ff' : '#374a5d' }}>{b.name}</span>
                     </Link>
                     <a
                       href={b.href}
@@ -374,11 +477,13 @@ export default async function PostPage({ params }: Props) {
             {/* Categories widget */}
             <div className="overflow-hidden" style={{ borderRadius: 16, border: '1px solid #e2e8f0', background: '#fff' }}>
               <div className="px-5 py-4" style={{ background: 'linear-gradient(135deg, #101923, #374a5d)' }}>
-                <h3 className="font-bold text-white" style={{ fontSize: 15 }}>Categories</h3>
+                <h3 className="font-bold text-white" style={{ fontSize: 15 }}>Explore</h3>
               </div>
               <ul className="divide-y divide-slate-100">
                 {[
-                  ['Brokers', '/brokers/'],
+                  ['Broker Reviews', '/brokers/'],
+                  ['Broker Comparisons', '/compare/'],
+                  ['Brokers by Country', '/countries/'],
                   ['Strategies', '/category/strategies/'],
                   ['Signals', '/category/signals/'],
                   ['Demo Accounts', '/category/demo-accounts/'],
